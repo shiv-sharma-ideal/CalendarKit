@@ -49,7 +49,12 @@ public class DaySelectorStyle: NSCopying {
 
   public var todayInactiveTextColor = UIColor.red
   public var todayActiveBackgroundColor = UIColor.red
-    
+
+  public var pastTextColor = UIColor.gray
+  public var futureTextColor = UIColor.black
+
+  public var useFuturePastForTextColorStyle = false
+
   public var font = UIFont.systemFont(ofSize: 18)
   public var todayFont = UIFont.boldSystemFont(ofSize: 18)
 
@@ -64,6 +69,9 @@ public class DaySelectorStyle: NSCopying {
     copy.inactiveBackgroundColor = inactiveBackgroundColor
     copy.todayInactiveTextColor = todayInactiveTextColor
     copy.todayActiveBackgroundColor = todayActiveBackgroundColor
+    copy.pastTextColor = pastTextColor
+    copy.futureTextColor = futureTextColor
+    copy.useFuturePastForTextColorStyle = useFuturePastForTextColorStyle
     copy.font = font
     copy.todayFont = todayFont
     return copy
