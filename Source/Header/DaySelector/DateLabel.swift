@@ -59,6 +59,12 @@ class DateLabel: UILabel, DaySelectorItemProtocol {
       font = style.todayFont
       textColor = style.activeTextColor
       backgroundColor = today ? style.todayActiveBackgroundColor : style.selectedBackgroundColor
+    } else if style.useFuturePastForTextColorStyle {
+      let isPast = date.isEarlier(than: calendar.startOfDay(for: Date()))
+      let notTodayColor = isPast ? style.pastTextColor : style.futureTextColor
+      font = style.font
+      textColor = today ? style.todayInactiveTextColor : notTodayColor
+      backgroundColor = style.inactiveBackgroundColor
     } else {
       let notTodayColor = isAWeekend(date: date) ? style.weekendTextColor : style.inactiveTextColor
       font = style.font
