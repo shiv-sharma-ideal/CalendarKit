@@ -1,6 +1,5 @@
 import UIKit
 import DateToolsSwift
-
 public class DayHeaderView: UIView {
 
   public var daysInWeek = 7
@@ -21,9 +20,9 @@ public class DayHeaderView: UIView {
 
   var currentWeekdayIndex = -1
 
-  var daySymbolsViewHeight: CGFloat = 20
+  var daySymbolsViewHeight: CGFloat = 30
   var pagingScrollViewHeight: CGFloat = 40
-  var swipeLabelViewHeight: CGFloat = 20
+  var swipeLabelViewHeight: CGFloat = 40
 
   let daySymbolsView: DaySymbolsView
   var pagingViewController = UIPageViewController(transitionStyle: .scroll,
@@ -31,15 +30,16 @@ public class DayHeaderView: UIView {
                                                        options: nil)
   let swipeLabelView: SwipeLabelView
 
-  init(calendar: Calendar) {
-    self.calendar = calendar
-    let symbols = DaySymbolsView(calendar: calendar)
-    let swipeLabel = SwipeLabelView(calendar: calendar)
-    self.swipeLabelView = swipeLabel
-    self.daySymbolsView = symbols
-    super.init(frame: .zero)
-    configure()
-  }
+    init(calendar: Calendar) {
+        self.calendar = calendar
+        let symbols = DaySymbolsView(calendar: calendar)
+        let swipeLabel = SwipeLabelView(calendar: calendar)
+        self.swipeLabelView = swipeLabel
+        swipeLabelView.backgroundColor = style.backgroundColor
+        self.daySymbolsView = symbols
+        super.init(frame: .zero)
+        configure()
+    }
 
   required public init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
@@ -95,9 +95,9 @@ public class DayHeaderView: UIView {
 
   override public func layoutSubviews() {
     super.layoutSubviews()
-    daySymbolsView.anchorAndFillEdge(.top, xPad: 0, yPad: 0, otherSize: daySymbolsViewHeight)
+    daySymbolsView.anchorAndFillEdge(.top, xPad: 0, yPad: 6, otherSize: daySymbolsViewHeight)
     pagingViewController.view?.alignAndFillWidth(align: .underCentered, relativeTo: daySymbolsView, padding: 0, height: pagingScrollViewHeight)
-    swipeLabelView.anchorAndFillEdge(.bottom, xPad: 0, yPad: 10, otherSize: swipeLabelViewHeight)
+    swipeLabelView.anchorAndFillEdge(.bottom, xPad: 0, yPad: 0, otherSize: swipeLabelViewHeight)
   }
 
   public func transitionToHorizontalSizeClass(_ sizeClass: UIUserInterfaceSizeClass) {
@@ -176,3 +176,4 @@ extension DayHeaderView: UIPageViewControllerDelegate {
     (pendingViewControllers as? [DaySelectorController])?.forEach{$0.updateStyle(style.daySelector)}
   }
 }
+

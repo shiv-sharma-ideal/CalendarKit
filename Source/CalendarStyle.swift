@@ -1,5 +1,3 @@
-
-
 public enum DateStyle {
     ///Times should be shown in the 12 hour format
     case twelveHour
@@ -163,3 +161,4 @@ public class AllDayStyle: NSCopying {
     return copy
   }
 }
+
