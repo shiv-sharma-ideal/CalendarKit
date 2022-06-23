@@ -18,11 +18,13 @@ public class DayHeaderView: UIView {
     }
   }
 
+    let seperatorLabel = UILabel(frame: .zero)
+
   var currentWeekdayIndex = -1
 
-  var daySymbolsViewHeight: CGFloat = 30
+  var daySymbolsViewHeight: CGFloat = 20
   var pagingScrollViewHeight: CGFloat = 40
-  var swipeLabelViewHeight: CGFloat = 40
+  var swipeLabelViewHeight: CGFloat = 48
 
   let daySymbolsView: DaySymbolsView
   var pagingViewController = UIPageViewController(transitionStyle: .scroll,
@@ -35,7 +37,8 @@ public class DayHeaderView: UIView {
         let symbols = DaySymbolsView(calendar: calendar)
         let swipeLabel = SwipeLabelView(calendar: calendar)
         self.swipeLabelView = swipeLabel
-        swipeLabelView.backgroundColor = style.backgroundColor
+        swipeLabelView.clipsToBounds = true
+        swipeLabelView.backgroundColor = style.backgroundLabelColor
         self.daySymbolsView = symbols
         super.init(frame: .zero)
         configure()
@@ -45,11 +48,11 @@ public class DayHeaderView: UIView {
     fatalError("init(coder:) has not been implemented")
   }
 
-  func configure() {
-    [daySymbolsView, swipeLabelView].forEach(addSubview)
-    backgroundColor = style.backgroundColor
-    configurePagingViewController()
-  }
+    func configure() {
+        [daySymbolsView, swipeLabelView, seperatorLabel].forEach(addSubview)
+        backgroundColor = style.backgroundColor
+        configurePagingViewController()
+    }
   
   func configurePagingViewController() {
     let selectedDate = Date()
@@ -85,20 +88,30 @@ public class DayHeaderView: UIView {
     return calendar.component(component, from: date)
   }
   
-  public func updateStyle(_ newStyle: DayHeaderStyle) {
-    style = newStyle.copy() as! DayHeaderStyle
-    daySymbolsView.updateStyle(style.daySymbols)
-    swipeLabelView.updateStyle(style.swipeLabel)
-    (pagingViewController.viewControllers as? [DaySelectorController])?.forEach{$0.updateStyle(newStyle.daySelector)}
-    backgroundColor = style.backgroundColor
-  }
+    public func updateStyle(_ newStyle: DayHeaderStyle) {
+        style = newStyle.copy() as! DayHeaderStyle
+        daySymbolsView.updateStyle(style.daySymbols)
+        swipeLabelView.updateStyle(style.swipeLabel)
+        (pagingViewController.viewControllers as? [DaySelectorController])?.forEach{$0.updateStyle(newStyle.daySelector)}
+        backgroundColor = style.backgroundColor
+    }
 
-  override public func layoutSubviews() {
-    super.layoutSubviews()
-    daySymbolsView.anchorAndFillEdge(.top, xPad: 0, yPad: 6, otherSize: daySymbolsViewHeight)
-    pagingViewController.view?.alignAndFillWidth(align: .underCentered, relativeTo: daySymbolsView, padding: 0, height: pagingScrollViewHeight)
-    swipeLabelView.anchorAndFillEdge(.bottom, xPad: 0, yPad: 0, otherSize: swipeLabelViewHeight)
-  }
+    override public func layoutSubviews() {
+        super.layoutSubviews()
+        daySymbolsView.anchorAndFillEdge(.top, xPad: 0, yPad: 12, otherSize: daySymbolsViewHeight)
+        pagingViewController.view?.alignAndFillWidth(align: .underCentered, relativeTo: daySymbolsView, padding: 0, height: pagingScrollViewHeight)
+        swipeLabelView.anchorAndFillEdge(.bottom, xPad: 0, yPad: 0, otherSize: swipeLabelViewHeight)
+        seperatorLabel.frame = CGRect(x: 0,
+                                      y: swipeLabelView.frame.origin.y,
+                                      width: swipeLabelView.frame.size.width,
+                                      height: 2)
+        seperatorLabel.layer.shadowColor = style.shadowColor.cgColor
+        seperatorLabel.layer.shadowRadius = 2
+        seperatorLabel.layer.shadowOpacity = 1.0
+        seperatorLabel.layer.shadowOffset = CGSize(width: 0.0, height: 2.0)
+        seperatorLabel.backgroundColor = style.backgroundColor
+        swipeLabelView.backgroundColor = style.backgroundLabelColor
+    }
 
   public func transitionToHorizontalSizeClass(_ sizeClass: UIUserInterfaceSizeClass) {
     currentSizeClass = sizeClass
